@@ -1,16 +1,5 @@
-// this is what you would do if you liked things to be easy:
-// var stringifyJSON = JSON.stringify;
-
-// but you don't so you're going to write it from scratch:
 
 var stringifyJSON = function(obj) {
-
-
-  if (typeof obj === 'boolean' && obj === true) {
-    return 'true';
-  } else if (typeof obj === 'boolean' && obj === false) {
-    return 'false';
-  }
 
   if (obj === null) {
     return 'null';
@@ -25,27 +14,30 @@ var stringifyJSON = function(obj) {
     for (let i = 0; i < obj.length; i++) {
       result.push(stringifyJSON(obj[i]));
     }
-    return '[' + result + ']';
+    // return result;
+    return '[' + result + ']';    // this works just as well as the next line. why?
+    // return '[' + result.join(',') + ']';
   }
 
   if (typeof obj === 'object') {
     if (Object.keys(obj).length === 0) {
       return '{}';
     }
-    var result = '';
+    var result = [];
     for (var key in obj) {
-      // result[key] = stringifyJSON(key);
-      // result[obj[key]] = stringifyJSON(obj[key]);
-      result += stringifyJSON(key) + ': ' + stringifyJSON(obj[key]);
-      console.log(result);
+      if (obj[key] === undefined || typeof obj[key] === 'function') {
+        continue;
+      }
+      result.push(stringifyJSON(key) + ':' + stringifyJSON(obj[key]));
     }
-    return '{' + result[key] + ':' + result[obj[key]] + '}';
+    // return '{' + result.join(',') + '}';
+    return '{' + result + '}';
   }
 
   return '' + obj;
-
 };
 
-var val = {'a': 'apple', 'b': 'bowl'};
+var val = {'a': 'apple', 'b': 'bowl', 'c': {'x': 345}};
+var val = [1, 2, 3, 4, 'b', 'c', {'a': 'alpha'}];
 console.log(stringifyJSON(val));
 console.log(JSON.stringify(val));
