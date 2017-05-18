@@ -5,6 +5,13 @@
 
 var stringifyJSON = function(obj) {
 
+
+  if (typeof obj === 'boolean' && obj === true) {
+    return 'true';
+  } else if (typeof obj === 'boolean' && obj === false) {
+    return 'false';
+  }
+
   if (obj === null) {
     return 'null';
   }
@@ -25,20 +32,20 @@ var stringifyJSON = function(obj) {
     if (Object.keys(obj).length === 0) {
       return '{}';
     }
-    var result = {};
+    var result = '';
     for (var key in obj) {
-      result[key] = stringifyJSON([key]);
-      result[obj[key]] = stringifyJSON(obj[key]);
-      console.log('result[key]: ', result[key]);
-      console.log('result[obj[key]]: ', result[obj[key]]);
+      // result[key] = stringifyJSON(key);
+      // result[obj[key]] = stringifyJSON(obj[key]);
+      result += stringifyJSON(key) + ': ' + stringifyJSON(obj[key]);
+      console.log(result);
     }
-    return '{' + result + '}';
+    return '{' + result[key] + ':' + result[obj[key]] + '}';
   }
 
   return '' + obj;
 
 };
 
-var val = {'a': 'apple'};
+var val = {'a': 'apple', 'b': 'bowl'};
 console.log(stringifyJSON(val));
 console.log(JSON.stringify(val));
